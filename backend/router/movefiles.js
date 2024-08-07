@@ -16,7 +16,7 @@ router.post('/move',(req,res) => {
     var minute = today.getMinutes()
     var second = today.getSeconds()
     const newpath = `./files/${filename}${year}${month}${day}${hour}${minute}${second}.pdf`
-    fs.rename(oldpath,newpath,(err) => {
+    fs.copyFile(oldpath,newpath,(err) => {
         if(err) return res.status(400).send(`Error : ${err}`)
         res.status(200).send("Sended successfully")
     }) 
