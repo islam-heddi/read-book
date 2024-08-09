@@ -7,12 +7,14 @@ const url = "mongodb://localhost:27017/bookapi"
 const mongoose = require('mongoose')
 const PORT = process.env.PORT || 5000
 const customerRouters = require('./router/customers')
+const bookRouters = require('./router/books')
 
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.use('/',movefiles)
 app.use('/',customerRouters)
+app.use('/book/',bookRouters)
 
 mongoose.connect(url)
 .then(() => console.log("database connected"))
