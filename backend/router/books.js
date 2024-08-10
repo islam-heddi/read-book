@@ -70,9 +70,7 @@ router.delete('/deletebook/:id',(req,res) => {
     book.findById({_id:id})
     .then(tbook => {
             let filepdf = tbook.pathbook
-            console.log(filepdf)
             filepdf = path.resolve(filepdf)
-            filepdf = "./../" + filepdf
             if(fs.existsSync(filepdf)){
                 fs.unlink(filepdf,(err) => {
                     if(err) return res.status(400).send("unable to remove the file")
@@ -84,7 +82,7 @@ router.delete('/deletebook/:id',(req,res) => {
                 res.status(404).send("Error : file doesnt exist")
             }
         })
-        .catch(err => res.status(404).send("unable to found the file"))
+        .catch(err => res.status(404).send("id is not existing"))
     }
 )
 
