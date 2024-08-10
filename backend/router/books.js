@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const book = require('./../models/schemabook')
-
+const path = require('path')
+const fs = require('fs')
 router.get('/allbooks',(req,res) => {
     book.find()
     .then((books) => res.json(books))
@@ -15,10 +16,36 @@ router.get('/findbook/:id',(req,res) => {
     .catch(err => res.status(404).send("book not found"))
 })
 
+const move_this_pdf_file = (oldpath) => {
+    const ext = path.extname(oldpath)
+    if(ext != ".pdf") return 0
+    const filename = path.basename(oldpath,'.pdf')
+    var today = new Date()
+    var year = today.getFullYear()
+    var month = today.getMonth()
+    month = (month < 10)? "0"+month : month
+    var day = today.getDay()
+    day = (day < 10)? "0"+day : day
+    var hour = today.getHours()
+    hour = (hour < 10)? "0"+hour:hour
+    var minute = today.getMinutes()
+    minute = (minute < 10)? "0"+minute:minute
+    var second = today.getSeconds()
+    second = (second < 10)? "0"+second:second
+    const newpath = `./files/${filename}${year}${month}${day}${hour}${minute}${second}.pdf`
+    fs.copyFile(oldpath,newpath,(err) => {
+        if(err) return 0
+    }) 
+    return newpath
+}
+
 router.post('/addbook',(req,res) => {
-    const { coverPicture,name,author,pages,publisherid } = req.body;
+    let { pathbook,coverPicture,name,author,pages,publisherid } = req.body;
+    pathbook = move_this_pdf_file(pathbook)
+    if(!pathbook) return res.status(500).send("Error : check the extension of file it should be .pdf or no such a file or a directory")
     const newBook = new book({
         publisherid,
+        pathbook,
         coverPicture,
         name,
         author,
@@ -40,9 +67,25 @@ router.put('/updatebook/:id', (req,res) => {
 
 router.delete('/deletebook/:id',(req,res) => {
     const {id} = req.params
-    book.findByIdAndDelete({_id:id})
-    .then(() => res.status(200).send("Deleted Successfully"))
-    .catch(err => res.status(400).send(`error : ${err}`))
-})
+    book.findById({_id:id})
+    .then(tbook => {
+            let filepdf = tbook.pathbook
+            console.log(filepdf)
+            filepdf = path.resolve(filepdf)
+            filepdf = "./../" + filepdf
+            if(fs.existsSync(filepdf)){
+                fs.unlink(filepdf,(err) => {
+                    if(err) return res.status(400).send("unable to remove the file")
+                    book.findByIdAndDelete({_id:id})
+                    .then(() => res.status(200).send("Deleted Successfully"))
+                    .catch(err => res.status(400).send(`error : ${err}`))
+                })
+            }else{
+                res.status(404).send("Error : file doesnt exist")
+            }
+        })
+        .catch(err => res.status(404).send("unable to found the file"))
+    }
+)
 
 module.exports = router
