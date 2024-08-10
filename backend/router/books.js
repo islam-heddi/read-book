@@ -17,7 +17,7 @@ router.get('/findbook/:id',(req,res) => {
 
 router.post('/addbook',(req,res) => {
     const { coverPicture,name,author,pages,publisherid } = req.body;
-    const newBook = new Book({
+    const newBook = new book({
         publisherid,
         coverPicture,
         name,
