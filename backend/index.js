@@ -10,7 +10,11 @@ const customerRouters = require('./router/customers')
 const bookRouters = require('./router/books')
 const registerRoute = require('./router/register')
 
-app.use(cors())
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    method: ["POST","GET","DELETE","PUT"]
+}))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.use('/',movefiles)

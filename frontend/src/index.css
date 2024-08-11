@@ -1,3 +1,25 @@
 * {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
+
+header{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header menu ul {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+header menu ul li {
+  list-style-type: none;
+  cursor: pointer;
+}
+
+header menu ul li:hover{
+  color: rgb(0, 255, 17)
+}
