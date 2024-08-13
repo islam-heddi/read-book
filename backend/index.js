@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 5000
 const customerRouters = require('./router/customers')
 const bookRouters = require('./router/books')
 const registerRoute = require('./router/register')
+const LoginRoute = require('./router/login')
 
 app.use(cors({
     origin: "http://localhost:5173",
@@ -21,6 +22,7 @@ app.use('/',movefiles)
 app.use('/',customerRouters)
 app.use('/book/',bookRouters)
 app.use('/',registerRoute)
+app.use('/',LoginRoute)
 
 mongoose.connect(url)
 .then(() => console.log("database connected"))
