@@ -18,42 +18,41 @@ router.post('/findemail',(req,res) =>  {
     })
     .catch(err => res.status(500).send(err))
 })
+router.post('/register', async (req, res) => {
+    const { name, dateofbirth, gender, email } = req.body;
+    let { password } = req.body;
+    
+    try {
+        // Check if the email already exists
+        const existingUser = await User.findOne({ email });
+        
+        if (existingUser) {
+            return res.status(400).send("Error: Email already exists");
+        }
 
-router.post('/register',async (req,res) => {
-    const {name, dateofbirth, gender , email } = req.body
-    let { password } = req.body
-    try{
-        let checkExist = false
-        // check the email if exists ?
-        User.findOne({email})
-        .then((response) => {
-            console.log(`respone : ${response}`)
-            if(response.email == email) checkExist = true
-            else checkExist = false
-            console.log("checkExist : " + checkExist)
-        })
-        .catch(err => res.status(500).send(err))
-        if(checkExist) return res.send("Error : Email exists")
-        console.log("Email exists " + checkExist)
-    // hash the password
-        password = await hash(password, 10)
-        console.log(password)
-        //creating the new user
+        console.log("Email does not exist, proceeding...");
+
+        // Hash the password
+        password = await hash(password, 10);
+        console.log(password);
+
+        // Create the new user
         const newUser = new User({
             name,
             dateofbirth,
             gender,
             email,
             password
-        })
-        //executing the data
-        newUser.save()
-        .then(() => res.status(200).send("added successfully"))
-        .catch(err => res.status(400).send(`error : ${err}`))
-    }catch(err){
-        res.status(500).send(`error : ${err}`)
+        });
+
+        // Save the new user to the database
+        await newUser.save();
+        res.status(200).send("User added successfully");
+        
+    } catch (err) {
+        res.status(500).send(`Error: ${err}`);
     }
-})
+});
 
 
 module.exports = router
