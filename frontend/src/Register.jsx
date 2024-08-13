@@ -9,6 +9,7 @@ function Register(){
     const [date,setDate] = useState(new Date())
     const [gender,setGender] = useState("") 
     const [result,setResult] = useState()
+    const [errorMessage,setErrorMessage] = useState("")
     const navigate = useNavigate()
     
     const handleName = (e) => {
@@ -55,7 +56,10 @@ function Register(){
         .then((response) =>{ console.log(response)
             if(response.status == 200) navigate('/')
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            setErrorMessage("error email exists")
+        })
     }
     return(
         <>
@@ -78,7 +82,8 @@ function Register(){
                 <button onClick={handleReset}>Reset</button>
             </form>
             </div>
-            {result}
+            
+            <p style={{color: "red"}}>{errorMessage}</p>
         </>
     )
 }
