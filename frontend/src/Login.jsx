@@ -1,11 +1,13 @@
+import axios from "axios";
 import NavBar from "./NavBar";
 import React,{useState} from 'react'
-
+import {useNavigate} from 'react-router-dom'
 function Login(){
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
     const [labelbuttonPassword,setLabelButtonPassword] = useState("Show")
     const [typePassword,settypePassword] = useState("password")
+    const navigate = useNavigate()
     const handleEmail = (e) => {
         setEmail(e.target.value)
     }
@@ -23,12 +25,23 @@ function Login(){
         settypePassword(prevType => prevType === "password" ? "text" : "password"); 
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const information = {
+            email,
+            password,
+        }
+        axios.post('http://localhost:5000/login',information)
+        .then(response => navigate('/board'))
+        .catch(err => console.log(err))
+    }
+
     return(
         <>
             <NavBar />
             <div>
                 <h1>Login</h1>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <label>
                         Email : 
                     </label>
