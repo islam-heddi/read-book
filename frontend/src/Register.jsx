@@ -9,6 +9,7 @@ function Register(){
     const [date,setDate] = useState(new Date())
     const [gender,setGender] = useState("") 
     const [result,setResult] = useState()
+    const [rpassword,setRPassword] = useState()
     const [errorMessage,setErrorMessage] = useState("")
     const navigate = useNavigate()
     
@@ -34,16 +35,24 @@ function Register(){
         setPassword("")
         setGender("")
         setDate(new Date())
+        setRPassword("")
     }
+
+    const handleRPassword = (e) => {
+        setRPassword(e.target.value)
+    } 
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        if(password !== rpassword){
+            setErrorMessage("Error in retype the password ")
+            return;
+        }
         setResult(<div>
             <p>Name : {name}</p>
             <p>Email : {email}</p>
             <p>Password : {password}</p>
             <p>Date : {date}</p>
-            <p>gendere : {gender}</p>
         </div>)
         const information = {
             name,
@@ -73,6 +82,8 @@ function Register(){
                 <input type="email" value={email} onChange={(e) => handleEmail(e)} placeholder="Enter your Email"required/><br />
                 <label>Password : </label>
                 <input type="password" value={password} onChange={(e) => handlePassword(e)} placeholder="*********"required/><br />
+                <label>Retype password : </label>
+                <input type="password" value={rpassword} onChange={(e) => handleRPassword(e)} placeholder="**********" required/><br />
                 <label>Gender : </label>
                 male <input type="radio" name="gender" checked={gender == "male" } onChange={() => handleGender("male")}required/> ////
                 female <input type="radio" name="gender" checked={gender == "female"}  onChange={() => handleGender("female")}required/><br />
