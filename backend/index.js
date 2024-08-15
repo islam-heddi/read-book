@@ -10,12 +10,15 @@ const customerRouters = require('./router/customers')
 const bookRouters = require('./router/books')
 const registerRoute = require('./router/register')
 const LoginRoute = require('./router/login')
+const protectedRoute = require('./router/protectedRoute')
+const cookieParser = require('cookie-parser')
 
 app.use(cors({
     origin: "http://localhost:5173",
     credentials: true,
     method: ["POST","GET","DELETE","PUT"]
 }))
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.use('/',movefiles)
@@ -23,6 +26,7 @@ app.use('/',customerRouters)
 app.use('/book/',bookRouters)
 app.use('/',registerRoute)
 app.use('/',LoginRoute)
+app.use('/',protectedRoute)
 
 mongoose.connect(url)
 .then(() => console.log("database connected"))
