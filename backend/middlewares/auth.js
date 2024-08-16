@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
 
 const verifyToken = (req, res, next) => {
-    const token = req.headers['authorization'];
-
+//    const token = req.headers['authorization'];
+    const token = req.cookies.token
     
 
     //const token = authHeader.split(' ')[1];   
@@ -15,6 +15,7 @@ const verifyToken = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, 'your-secret-key');
         req.userId = decoded.id;
+        req.userName = decoded.name;
         console.log("id : "+ decoded.id)
         console.log("name : " + decoded.name)
         next();
