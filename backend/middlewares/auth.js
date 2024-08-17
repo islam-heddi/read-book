@@ -16,8 +16,8 @@ const verifyToken = (req, res, next) => {
         const decoded = jwt.verify(token, 'your-secret-key');
         req.userId = decoded.id;
         req.userName = decoded.name;
-        console.log("id : "+ decoded.id)
-        console.log("name : " + decoded.name)
+        req.userEmail = decoded.email;
+        req.userDate = decoded.date;
         next();
     } catch (error) {
         return res.status(401).json({ error: 'Invalid token' });

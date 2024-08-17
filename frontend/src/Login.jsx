@@ -24,6 +24,7 @@ function Login(){
         setLabelButtonPassword(prevLabel => prevLabel === "Show" ? "Hide" : "Show");
         settypePassword(prevType => prevType === "password" ? "text" : "password"); 
     }
+    axios.defaults.withCredentials = true
 
     const handleSubmit = (e) => {
         e.preventDefault()
