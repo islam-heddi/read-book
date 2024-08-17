@@ -1,4 +1,5 @@
 import {useNavigate} from 'react-router-dom'
+import axios from 'axios'
 function NavBar(props){
     const navigate = useNavigate()
     const notAuth =
@@ -15,7 +16,11 @@ function NavBar(props){
     </ul>
 
     const HandleDeconnect = () => {
-
+        axios.post('http://localhost:5000/deconnect')
+        .then(Response => {
+            console.log(Response)
+            navigate('/login')
+        })
     }
 
     const Auth = 
