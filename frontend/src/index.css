@@ -23,3 +23,33 @@ header menu ul li {
 header menu ul li:hover{
   color: rgb(0, 255, 17)
 }
+
+.listinfo{
+  > li {
+    list-style-type: none;
+    margin: 10px;
+    cursor: pointer;
+  }
+  > li:hover{
+    color: rgb(0, 255, 17);
+  }
+  > li:last-child{
+    color: red;
+  }
+  > li:last-child:hover{
+    color: rgba(255, 0, 0, 0.516);
+  }
+}
+
+.headlogo{
+  cursor: pointer;
+}
+
+.container{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 8rem;
+  gap: 50px;
+}

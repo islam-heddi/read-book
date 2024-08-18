@@ -29,9 +29,13 @@ function NavBar(props){
         <li onClick={() => navigate('/settings')}>Settings</li>
     </ul>
 
+    const handleLogo = () => {
+        navigate(props.auth?'/board':'/login')
+    }
+
     return(
     <header>
-        <h1>RBOOK</h1>
+        <h1 className={props.auth?"headlogo":""} onClick={handleLogo}>RBOOK</h1>
         <menu>
             {props.auth?Auth:notAuth}
         </menu>
