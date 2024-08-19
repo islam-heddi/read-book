@@ -44,7 +44,16 @@ function Settings(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const information = {
+            id: data.id,
+            name: form.name,
+            email: form.email,
+            date: form.date
+        }
         // Handle form submission logic here
+        axios.put('http://localhost:5000/updateuser',information)
+        .then(response => console.log(response))
+        .catch(err => console.log(err))
     };
 
     const handleReset = () => {

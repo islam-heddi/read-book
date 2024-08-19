@@ -3,6 +3,12 @@ const router = express.Router()
 const User = require('./../models/schemauser')
 const {hash} = require('bcrypt')
 
+router.put('/updateuser',(req,res) => {
+    const {id,name,email,date} = req.body;
+    User.findOneAndUpdate({_id:id},{email,name,date})
+    .then(response => res.status(200).send("updated successfully"))
+    .catch(err => res.status(500).send(err))
+})
 
 router.get('/users',(req,res) => {
     User.find()
