@@ -1,15 +1,22 @@
-import NavBar from './NavBar';
-import {useNavigate} from 'react-router-dom';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {getYear, getMonth, getDate} from 'date-fns';
+import { useNavigate } from 'react-router-dom';
+import NavBar from './NavBar';
 
 function Settings(props) {
     const navigate = useNavigate();
     const [data, setData] = useState(null);
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [date, setDate] = useState("");
+    const [form, setForm] = useState({
+        name: '',
+        email: '',
+        date: '',
+        currentPassword: '',
+        newPassword: '',
+        rnewPassword: '',
+        password: ''
+    });
+    const [view, setView] = useState('information');
+
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
@@ -17,145 +24,173 @@ function Settings(props) {
             .then(response => {
                 const { name, email, date } = response.data;
                 setData(response.data);
-                setName(name);
-                setEmail(email);
-                // Ensure date is parsed correctly
-                const parsedDate = new Date(date);
-                setDate(parsedDate.toISOString().split('T')[0]); // Format as yyyy-mm-dd
+                setForm(prevForm => ({
+                    ...prevForm,
+                    name,
+                    email,
+                    date: new Date(date).toISOString().split('T')[0]
+                }));
             })
-            .catch(err => navigate('/login'));
+            .catch(() => navigate('/login'));
     }, [navigate]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm(prevForm => ({
+            ...prevForm,
+            [name]: value
+        }));
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission logic
+        // Handle form submission logic here
     };
 
     const handleReset = () => {
         if (data) {
-            setName(data.name);
-            setEmail(data.email);
-            setDate(new Date(data.date).toISOString().split('T')[0]); // Format as yyyy-mm-dd
+            setForm({
+                ...form,
+                name: data.name,
+                email: data.email,
+                date: new Date(data.date).toISOString().split('T')[0],
+                currentPassword: '',
+                newPassword: '',
+                rnewPassword: '',
+                password: ''
+            });
         }
     };
 
-    const handleName = (e) => {
-        setName(e.target.name)
-    }
-
-    const handleEmail = (e) => {
-        setEmail(e.target.email)
-    }
-
-    const informationPart = data && (
-        <div>
-            <h1>Change the Information</h1>
-            <form onSubmit={handleSubmit}>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Name:</td>
-                            <td>
-                                <input 
-                                    type="text" 
-                                    value={name} 
-                                    onChange={(e) => handleName(e)} 
-                                    placeholder='Enter your name' 
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Email:</td>
-                            <td>
-                                <input 
-                                    type="email" 
-                                    value={email} 
-                                    onChange={(e) => handleEmail(e)} 
-                                    placeholder='email@email.com' 
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Date:</td>
-                            <td>
-                                <input 
-                                    type="date" 
-                                    value={date} 
-                                    onChange={(e) => setDate(e.target.value)} 
-                                />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button type="submit">Submit</button>
-                <button type="button" onClick={handleReset}>Reset</button>
-            </form>
-        </div>
-    );
-
-    const passwordPart = (
-        <div>
-            <h1>Change the Password</h1>
-            <form onSubmit={handleSubmit}>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Current Password:</td>
-                            <td>
-                                <input type="password" placeholder='************' />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>New Password:</td>
-                            <td>
-                                <input type="password" placeholder='************' />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Retype New Password:</td>
-                            <td>
-                                <input type="password" placeholder='************' />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button type="submit">Submit</button>
-                <button type="button" onClick={handleReset}>Reset</button>
-            </form>
-        </div>
-    );
-
-    const removePart = (
-        <div>
-            <h1>Are you sure you want to remove this account?</h1>
-            <form onSubmit={handleSubmit}>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Type the password:</td>
-                            <td>
-                                <input type="password" placeholder='************' />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button type="submit">Remove this account</button>
-            </form>
-        </div>
-    );
-
-    const [part, setPart] = useState(informationPart);
-
-    const handleInformation = () => {
-        setPart(informationPart);
-    };
-
-    const handleChangePassword = () => {
-        setPart(passwordPart);
-    };
-
-    const handleDeleteAccount = () => {
-        setPart(removePart);
+    const renderView = () => {
+        switch (view) {
+            case 'information':
+                return (
+                    <div>
+                        <h1>Change the Information</h1>
+                        <form onSubmit={handleSubmit}>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Name:</td>
+                                        <td>
+                                            <input 
+                                                type="text" 
+                                                name="name"
+                                                value={form.name} 
+                                                onChange={handleChange} 
+                                                placeholder='Enter your name' 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email:</td>
+                                        <td>
+                                            <input 
+                                                type="email" 
+                                                name="email"
+                                                value={form.email} 
+                                                onChange={handleChange} 
+                                                placeholder='email@email.com' 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date:</td>
+                                        <td>
+                                            <input 
+                                                type="date" 
+                                                name="date"
+                                                value={form.date} 
+                                                onChange={handleChange} 
+                                            />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button type="submit">Submit</button>
+                            <button type="button" onClick={handleReset}>Reset</button>
+                        </form>
+                    </div>
+                );
+            case 'password':
+                return (
+                    <div>
+                        <h1>Change the Password</h1>
+                        <form onSubmit={handleSubmit}>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Current Password:</td>
+                                        <td>
+                                            <input 
+                                                type="password"
+                                                name="currentPassword"
+                                                value={form.currentPassword}
+                                                onChange={handleChange} 
+                                                placeholder='************' 
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>New Password:</td>
+                                        <td>
+                                            <input 
+                                                type="password"
+                                                name="newPassword"
+                                                value={form.newPassword} 
+                                                onChange={handleChange} 
+                                                placeholder='************'
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Retype New Password:</td>
+                                        <td>
+                                            <input 
+                                                type="password"
+                                                name="rnewPassword"
+                                                value={form.rnewPassword}
+                                                onChange={handleChange}
+                                                placeholder='************' 
+                                            />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button type="submit">Submit</button>
+                            <button type="button" onClick={handleReset}>Reset</button>
+                        </form>
+                    </div>
+                );
+            case 'remove':
+                return (
+                    <div>
+                        <h1>Are you sure you want to remove this account?</h1>
+                        <form onSubmit={handleSubmit}>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Type the password:</td>
+                                        <td>
+                                            <input 
+                                                type="password"
+                                                name="password"
+                                                value={form.password} 
+                                                onChange={handleChange}
+                                                placeholder='************'
+                                            />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button type="submit">Remove this account</button>
+                        </form>
+                    </div>
+                );
+            default:
+                return null;
+        }
     };
 
     return (
@@ -164,12 +199,12 @@ function Settings(props) {
             <div className='container'>
                 <menu>
                     <ul className='listinfo'>
-                        <li onClick={handleInformation}>Change Information</li>
-                        <li onClick={handleChangePassword}>Change Password</li>
-                        <li onClick={handleDeleteAccount}>Delete Account</li>
+                        <li onClick={() => setView('information')}>Change Information</li>
+                        <li onClick={() => setView('password')}>Change Password</li>
+                        <li onClick={() => setView('remove')}>Delete Account</li>
                     </ul>
                 </menu>
-                {!data ? "Loading..." : part}
+                {!data ? "Loading..." : renderView()}
             </div>
         </>
     );
