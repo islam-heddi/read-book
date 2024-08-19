@@ -1,29 +1,27 @@
-import NavBar from './NavBar'
-import {useNavigate} from 'react-router-dom'
-import React, {useEffect, useState} from 'react'
-import axios from 'axios'
-import {getYear} from 'date-fns'
-
+import NavBar from './NavBar';
+import {useNavigate} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+import {getYear, getMonth, getDate} from 'date-fns';
 
 function Settings(props) {
     const navigate = useNavigate();
     const [data, setData] = useState(null);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [date, setDate] = useState(new Date());
-    const [newdate,setNewdate] = useState("")
+    const [date, setDate] = useState("");
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
         axios.get('http://localhost:5000/board')
             .then(response => {
+                const { name, email, date } = response.data;
                 setData(response.data);
-                setName(response.data.name);
-                setEmail(response.data.email);
-                setDate(response.data.date);
-                setNewdate(response.data.date)
-                console.log(newdate)
-                setDate(new Date(newdate.getYear(),newdate.getMonth(),newdate.getDay()))
+                setName(name);
+                setEmail(email);
+                // Ensure date is parsed correctly
+                const parsedDate = new Date(date);
+                setDate(parsedDate.toISOString().split('T')[0]); // Format as yyyy-mm-dd
             })
             .catch(err => navigate('/login'));
     }, [navigate]);
@@ -34,10 +32,20 @@ function Settings(props) {
     };
 
     const handleReset = () => {
-        setName(data.name);
-        setEmail(data.email);
-        setDate(data.date);
+        if (data) {
+            setName(data.name);
+            setEmail(data.email);
+            setDate(new Date(data.date).toISOString().split('T')[0]); // Format as yyyy-mm-dd
+        }
     };
+
+    const handleName = (e) => {
+        setName(e.target.name)
+    }
+
+    const handleEmail = (e) => {
+        setEmail(e.target.email)
+    }
 
     const informationPart = data && (
         <div>
@@ -51,7 +59,7 @@ function Settings(props) {
                                 <input 
                                     type="text" 
                                     value={name} 
-                                    onChange={(e) => setName(e.target.value)} 
+                                    onChange={(e) => handleName(e)} 
                                     placeholder='Enter your name' 
                                 />
                             </td>
@@ -62,7 +70,7 @@ function Settings(props) {
                                 <input 
                                     type="email" 
                                     value={email} 
-                                    onChange={(e) => setEmail(e.target.value)} 
+                                    onChange={(e) => handleEmail(e)} 
                                     placeholder='email@email.com' 
                                 />
                             </td>
@@ -85,7 +93,7 @@ function Settings(props) {
         </div>
     );
 
-    const passwordPart = data && (
+    const passwordPart = (
         <div>
             <h1>Change the Password</h1>
             <form onSubmit={handleSubmit}>
@@ -117,7 +125,7 @@ function Settings(props) {
         </div>
     );
 
-    const removePart = data && (
+    const removePart = (
         <div>
             <h1>Are you sure you want to remove this account?</h1>
             <form onSubmit={handleSubmit}>
