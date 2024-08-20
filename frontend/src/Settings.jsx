@@ -101,6 +101,22 @@ function Settings(props) {
         .catch(err => console.log(err))
     }
 
+    const handleRemoveSubmit = async (e) => {
+        e.preventDefault()
+        const information = {
+            id: data.id,
+            currentpassword: form.password
+        }
+        try{
+            const res1 = await axios.post('http://localhost:5000/verify',information)
+            const res2 = await axios.delete('http://localhost:5000/deleteuser/'+data.id)
+            navigate('/login')
+        }catch(err){
+            setErrorMessage(err.response.data)
+            console.log(err)
+        }
+    }
+
     const renderView = () => {
         switch (view) {
             case 'information':
@@ -207,7 +223,7 @@ function Settings(props) {
                 return (
                     <div>
                         <h1>Are you sure you want to remove this account?</h1>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleRemoveSubmit}>
                             <table>
                                 <tbody>
                                     <tr>
@@ -226,6 +242,7 @@ function Settings(props) {
                             </table>
                             <button type="submit">Remove this account</button>
                         </form>
+                        <p className='error'>{errorMessage}</p>
                     </div>
                 );
             default:

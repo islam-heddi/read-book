@@ -5,6 +5,17 @@ const { hash,compare } = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const verifySession = require('./../middlewares/auth')
 
+router.delete('/deleteuser/:id',async (req,res) => {
+    const {id} = req.params
+    try{
+        const user = await User.findByIdAndDelete({_id:id})
+        if(!user) return res.status(400).send("error user doesnt exist")
+        else return res.status(200).send("deleted successfully")
+    }catch(err){
+        return res.status(500).send("internal server error")
+    }
+})
+
 router.put('/updatepassword/:id',async (req,res) => {
     const {newpassword} = req.body
     const {id} = req.params;
