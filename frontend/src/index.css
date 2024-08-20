@@ -53,3 +53,7 @@ header menu ul li:hover{
   margin: 8rem;
   gap: 50px;
 }
+
+.error{
+  color: red;
+}

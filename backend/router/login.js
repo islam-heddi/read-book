@@ -1,8 +1,36 @@
 const express = require('express')
 const router = express.Router()
 const User = require('./../models/schemauser')
-const { compare } = require('bcrypt')
+const { hash,compare } = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const verifySession = require('./../middlewares/auth')
+
+router.put('/updatepassword/:id',async (req,res) => {
+    const {newpassword} = req.body
+    const {id} = req.params;
+    try{
+        const hshpwd = await hash(newpassword,10) 
+        const user = await User.findByIdAndUpdate({_id:id},{password: hshpwd})
+        if(!user) return res.status(400).send("error in updatng")
+        else return res.status(200).send("updated successfully")
+    }catch(err){
+        return res.status(500).send(`internal server error ${err}`)
+    }
+})
+
+router.post('/verify',verifySession, async (req,res) => {
+    const {id,currentpassword} = req.body;
+    try{
+        const user = await User.findById(id)
+        console.log("user : " + user)
+        console.log("currentpassword : " + currentpassword)
+        const checkpassword = await compare(currentpassword,user.password)
+        if(checkpassword) return res.status(200).send("password match")
+        else return res.status(400).send("password does not match")
+    }catch(err){
+        return res.status(500).send(`internal server error ${err}`)
+    }
+})
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;

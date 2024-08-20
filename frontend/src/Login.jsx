@@ -7,6 +7,7 @@ function Login(){
     const [password,setPassword] = useState("")
     const [labelbuttonPassword,setLabelButtonPassword] = useState("Show")
     const [typePassword,settypePassword] = useState("password")
+    const [errorMessage,setErrorMessage] = useState("")
     const navigate = useNavigate()
     const handleEmail = (e) => {
         setEmail(e.target.value)
@@ -34,7 +35,10 @@ function Login(){
         }
         axios.post('http://localhost:5000/login',information)
         .then(response => navigate('/board'))
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            setErrorMessage(err.response.data.error)
+        })
     }
 
     return(
@@ -54,6 +58,7 @@ function Login(){
                     <button>Validate</button>
                     <button onClick={hanldeReset}>Reset</button>
                 </form>
+                <p className="error">{errorMessage}</p>
             </div>
         </>
     )

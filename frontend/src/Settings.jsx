@@ -6,6 +6,7 @@ import NavBar from './NavBar';
 function Settings(props) {
     const navigate = useNavigate();
     const [data, setData] = useState(null);
+    const [errorMessage,setErrorMessage] = useState("")
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -71,6 +72,35 @@ function Settings(props) {
         }
     };
 
+    const handleSubmitPassword = (e) => {
+        e.preventDefault()
+        if(form.newPassword != form.rnewPassword) {
+            setErrorMessage("Error : the new password doesnt match The retyped password")
+            return 0;
+        }
+        console.log(data.id)
+        console.log(form.currentPassword)
+        const information = {
+            id: data.id,
+            currentpassword: form.currentPassword
+        }
+        console.log(information)
+        axios.post('http://localhost:5000/verify',information)
+        .then(response => {
+            if(response.status == 400) {
+                setErrorMessage("Error : current password is wrong")
+                return 0;
+            }
+            console.log(response)
+        })
+        .catch(err => console.log(err))
+        axios.put('http://localhost:5000/updatepassword/'+data.id,{newpassword:form.newPassword})
+        .then(response => {
+            console.log(response)
+        })
+        .catch(err => console.log(err))
+    }
+
     const renderView = () => {
         switch (view) {
             case 'information':
@@ -126,7 +156,7 @@ function Settings(props) {
                 return (
                     <div>
                         <h1>Change the Password</h1>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmitPassword}>
                             <table>
                                 <tbody>
                                     <tr>
@@ -170,6 +200,7 @@ function Settings(props) {
                             <button type="submit">Submit</button>
                             <button type="button" onClick={handleReset}>Reset</button>
                         </form>
+                        <p className='error'>{errorMessage}</p>
                     </div>
                 );
             case 'remove':
