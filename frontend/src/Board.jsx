@@ -30,6 +30,7 @@ function Board(props) {
             <p>Hello, Mr {data.name || " "}</p>
             <p>Email: {data.email || " "}</p>
             <p>You were born in {data.date || " "}</p>
+            <button onClick={() => navigate('/addbook')}>Add a book</button>
         </div>
     )
 
