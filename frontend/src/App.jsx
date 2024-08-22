@@ -9,6 +9,7 @@ import Login from './Login'
 import Board from './Board'
 import Settings from './Settings'
 import AddBook from './AddBook'
+import ShowBook from './ShowBook'
 import React,{useState} from 'react'
 function App() {
   const [Authenticated,setAuth ] = useState(false)
@@ -21,6 +22,7 @@ function App() {
         <Route exact path='/board' element={<Board auth={Authenticated} setAuth={setAuth}/>} />
         <Route exact path='/settings' element={<Settings auth={Authenticated} setAuth={setAuth}/>}/>
         <Route exact path='/addbook' element={<AddBook auth={Authenticated} setAuth={setAuth}/>}/>
+        <Route exact path='/showbook' element={<ShowBook auth={Authenticated} setAuth={setAuth}/>}/>
       </Routes>
     </BrowserRouter>
   )

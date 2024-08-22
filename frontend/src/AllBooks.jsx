@@ -1,7 +1,9 @@
 import axios from "axios"
 import React,{useEffect,useState} from 'react'
+import { useNavigate } from "react-router-dom"
 
 function AllBooks(){
+    const navigate = useNavigate()
     const [data,setData] = useState()
     useEffect(() => {
         axios.get('http://localhost:5000/book/allbooks')
@@ -14,7 +16,7 @@ function AllBooks(){
 
     const alldata = data && (
         <>
-            {data.map((value,index) => <div className="bookitem" key={index}>
+            {data.map((value,index) => <div className="bookitem" onClick={() => navigate("/showbook")} key={index}>
                 <ul>
                     <li>name : {value.name}</li>
                     <li>Pages : {value.pages}</li>
