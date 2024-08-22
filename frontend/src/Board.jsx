@@ -2,6 +2,7 @@ import NavBar from './NavBar'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import AllBooks from './AllBooks'
 
 function Board(props) {
     const [data, setData] = useState(null)
@@ -31,6 +32,7 @@ function Board(props) {
             <p>Email: {data.email || " "}</p>
             <p>You were born in {data.date || " "}</p>
             <button onClick={() => navigate('/addbook')}>Add a book</button>
+            <AllBooks />
         </div>
     )
 
