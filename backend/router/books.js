@@ -3,6 +3,8 @@ const router = express.Router()
 const book = require('./../models/schemabook')
 const path = require('path')
 const fs = require('fs')
+const multer = require('multer')
+const upload = multer({dest: 'uploads/'})
 router.get('/allbooks',(req,res) => {
     book.find()
     .then((books) => res.json(books))
@@ -16,7 +18,8 @@ router.get('/findbook/:id',(req,res) => {
     .catch(err => res.status(404).send("book not found"))
 })
 
-const move_this_pdf_file = (oldpath) => {
+const move_this_pdf_file = (oldfile) => {
+    let oldpath = oldfile.originalname
     const ext = path.extname(oldpath)
     if(ext != ".pdf") return 0
     const filename = path.basename(oldpath,'.pdf')
@@ -33,14 +36,16 @@ const move_this_pdf_file = (oldpath) => {
     var second = today.getSeconds()
     second = (second < 10)? "0"+second:second
     const newpath = `./files/${filename}${year}${month}${day}${hour}${minute}${second}.pdf`
-    fs.copyFile(oldpath,newpath,(err) => {
+    fs.copyFile(oldfile.path,newpath,(err) => {
         if(err) return 0
     }) 
     return newpath
 }
 
-router.post('/addbook',(req,res) => {
-    let { pathbook,coverPicture,name,author,pages,publisherid } = req.body;
+router.post('/addbook',upload.single('pathbook'),(req,res) => {
+    let pathbook = req.file
+    if(!pathbook) return res.status(400).send("Bad file or invalid file")
+    let { coverPicture,name,author,pages,publisherid } = req.body;
     pathbook = move_this_pdf_file(pathbook)
     if(!pathbook) return res.status(500).send("Error : check the extension of file it should be .pdf or no such a file or a directory")
     const newBook = new book({
