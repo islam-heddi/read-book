@@ -8,8 +8,8 @@ function AddBook(props){
     const [name,setName] = useState("")
     const [author,setAuthor] = useState("")
     const [page,setPage] = useState(null)
-    const [pathbook,setPathbook] = useState("")
-    const [coverpicture,setCoverpicture] = useState("")
+    const [pathbook,setPathbook] = useState(null)
+    const [coverpicture,setCoverpicture] = useState(null)
     const [data,setData] = useState()
     axios.defaults.withCredentials = true
     useEffect(() => {
@@ -32,7 +32,11 @@ function AddBook(props){
             publisherid: data.id
         }
         console.log(information)
-        axios.post('http://localhost:5000/book/addbook',information)
+        axios.post('http://localhost:5000/book/addbook',information,{
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
         .then(response => console.log(response))
         .catch(err => console.log(err))
     }
@@ -50,19 +54,19 @@ function AddBook(props){
     }
 
     const handlePathBook = (e)  => {
-        setPathbook(e.target.value)
+        setPathbook(e.target.files[0])
     }
 
     const handleCoverPicture = (e) => {
-        setCoverpicture(e.target.value)
+        setCoverpicture(e.target.files[0])
     }
 
     const handleReset = (e) => {
         setName("")
         setAuthor("")
         setPage("")
-        setPathBook("")
-        setCoverpicture("")
+        setPathBook(null)
+        setCoverpicture(null)
     }
 
     return(
@@ -71,8 +75,8 @@ function AddBook(props){
             <div>
                 <h1>Add a book</h1>
                 <form onSubmit={handleSubmit}>
-                    <tbody>
-                        <table>
+                    <table>
+                        <tbody>
                             <tr>
                                 <td>Name of book :</td> 
                                 <td>
@@ -111,8 +115,8 @@ function AddBook(props){
                                     <input type="file" value={coverpicture} onChange={(e) => handleCoverPicture(e)} />
                                 </td>
                             </tr>
-                        </table>
-                    </tbody>
+                        </tbody>
+                    </table>
                 <button>Submit</button>
                 <button onClick={handleReset}>Reset</button>
                 </form>
