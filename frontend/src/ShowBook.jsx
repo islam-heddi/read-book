@@ -6,8 +6,9 @@ import { useNavigate, useParams } from "react-router-dom"
 function ShowBook(props){
     const navigate = useNavigate()
     const [data,setData] = useState()
+    const [downloaddata,setDownloaddata] = useState()
     const id_of_book = useParams()
-
+    const [pdfurl,setPdfurl] = useState("")
     useEffect(() => {
         axios.get('http://localhost:5000/book/findbook/'+id_of_book.id)
         .then(response => setData(response.data))
@@ -18,6 +19,22 @@ function ShowBook(props){
     },)
 
 
+    useEffect(() => {
+        const url = "http://localhost:5000/"
+        setPdfurl(url+data.pathbook)
+    },[data])
+
+/*    useEffect(() => {
+        axios.get('http://localhost:5000/book/downloadbook/'+id_of_book.id)
+        .then(response => {
+            setDownloaddata(response.data)
+        })
+        .catch((err) => {
+            console.log(err)
+            navigate(-1)
+        })
+    },)*/
+
     const previewing = data && (
             <div>
                 <h1>View the book</h1>
@@ -26,7 +43,7 @@ function ShowBook(props){
                     <li>Author : {data.author}</li>
                     <li>pages : {data.pages}</li>
                 </ul>
-                <iframe src={data.pathbook} width="100%" height="500px" />
+                <iframe src={pdfurl} width="100%" height="500px" />
             </div>       
     )
 

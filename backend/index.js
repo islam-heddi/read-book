@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const path = require('path')
 const movefiles = require('./router/movefiles')
 const url = "mongodb://localhost:27017/bookapi"
 const mongoose = require('mongoose')
@@ -19,6 +20,7 @@ app.use(cors({
     credentials: true,
     method: ["POST","GET","DELETE","PUT"]
 }))
+app.use('/files',express.static(path.join(__dirname,'files')))
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
