@@ -22,7 +22,7 @@ function App() {
         <Route exact path='/board' element={<Board auth={Authenticated} setAuth={setAuth}/>} />
         <Route exact path='/settings' element={<Settings auth={Authenticated} setAuth={setAuth}/>}/>
         <Route exact path='/addbook' element={<AddBook auth={Authenticated} setAuth={setAuth}/>}/>
-        <Route exact path='/showbook' element={<ShowBook auth={Authenticated} setAuth={setAuth}/>}/>
+        <Route exact path='/showbook/:id' element={<ShowBook auth={Authenticated} setAuth={setAuth}/>}/>
       </Routes>
     </BrowserRouter>
   )

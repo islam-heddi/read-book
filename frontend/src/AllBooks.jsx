@@ -1,5 +1,5 @@
 import axios from "axios"
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useState,createContext} from 'react'
 import { useNavigate } from "react-router-dom"
 
 function AllBooks(){
@@ -16,13 +16,15 @@ function AllBooks(){
 
     const alldata = data && (
         <>
-            {data.map((value,index) => <div className="bookitem" onClick={() => navigate("/showbook")} key={index}>
-                <ul>
-                    <li>name : {value.name}</li>
-                    <li>Pages : {value.pages}</li>
-                    <li>author : {value.author}</li>
-                </ul>
-            </div>)}
+            {data.map((value,index) => 
+                    <div className="bookitem" onClick={() => navigate("/showbook/"+value._id)} key={index}>                
+                        <ul>
+                            <li>name : {value.name}</li>
+                            <li>Pages : {value.pages}</li>
+                            <li>author : {value.author}</li>
+                        </ul>
+                    </div>
+                )}
         </>
     )
 
