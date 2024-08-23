@@ -19,22 +19,33 @@ function MyBooks(props){
         })
     })
 
+    const handleDelete = (id) => {
+        axios.delete('http://localhost:5000/book/deletebook/'+id)
+        .then(response => console.log(response))
+        .catch(err => console.log(err))
+    }
+
     const ShowData = data && (
-        data.map((value,index) => <>
+        data.map((value,index) => <div className='bookcontainer'>
             <div className="bookitem" onClick={() => navigate("/showbook/"+value._id)} key={index}>                
-                        <ul>
-                            <li>name : {value.name}</li>
-                            <li>Pages : {value.pages}</li>
-                            <li>author : {value.author}</li>
-                        </ul>
-                    </div>
-        </>)
+                <ul>
+                    <li>name : {value.name}</li>
+                    <li>Pages : {value.pages}</li>
+                    <li>author : {value.author}</li>
+                </ul>
+            </div>
+            <div>
+                <button>Update info</button>
+                <button onClick={() => handleDelete(value._id)}>Delete book</button>
+            </div>
+        </div>)
     )
 
     return(
         <>
             <NavBar auth={props.auth}/>
             {!data? "loading ...":ShowData}
+            
         </>
     )
 }

@@ -39,7 +39,10 @@ function AddBook(props) {
                 "content-type": "multipart/form-data",
             },
         })
-            .then(response => console.log(response))
+            .then(response => {
+                console.log(response)
+                navigate('/board')
+            })
             .catch(err => console.log(err))
     }
 
