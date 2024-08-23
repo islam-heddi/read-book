@@ -6,7 +6,6 @@ import { useNavigate, useParams } from "react-router-dom"
 function ShowBook(props){
     const navigate = useNavigate()
     const [data,setData] = useState()
-    const [downloaddata,setDownloaddata] = useState()
     const id_of_book = useParams()
     const [pdfurl,setPdfurl] = useState("")
     useEffect(() => {
@@ -20,8 +19,9 @@ function ShowBook(props){
 
 
     useEffect(() => {
+        console.log(data)
         const url = "http://localhost:5000/"
-        setPdfurl(url+data.pathbook)
+        setPdfurl(!data? "" : url+data.pathbook)
     },[data])
 
 /*    useEffect(() => {

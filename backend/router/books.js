@@ -11,6 +11,13 @@ router.get('/allbooks',(req,res) => {
     .catch((err) => res.status(400).send(err))
 })
 
+router.get('/mybooks/:id',(req,res) => {
+    const {id} = req.params;
+    book.find({publisherid:id})
+    .then(books => res.json(books))
+    .catch(err => res.status(400).send(err))
+})
+
 router.get('/downloadbook/:id',(req,res)=>{
     const {id} = req.params
     book.findById({_id:id})
