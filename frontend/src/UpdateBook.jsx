@@ -15,7 +15,7 @@ function UpdateBook(props){
         axios.get('http://localhost:5000/book/findbook/'+id)
         .then(response => setData(response.data))
         .catch(err => {
-          //  navigate(-1)
+            navigate(-1)
             console.log(err)
         })
     },[])
