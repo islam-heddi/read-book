@@ -77,11 +77,10 @@ router.post('/addbook',upload.single('pathbook'),(req,res) => {
 
 router.put('/updatebook/:id', (req,res) => {
     const {id} = req.params
-    const { coverPicture,name,author,pages,publisherid } = req.body
-    book.findByIdAndUpdate({_id:id},{coverPicture,publisherid,name,author,pages})
+    const { coverPicture,name,author,pages } = req.body
+    book.findByIdAndUpdate({_id:id},{coverPicture,name,author,pages})
     .then(() => res.status(200).send("updated successfully"))
     .catch(err => res.status(400).send(err))
-
 })
 
 router.delete('/deletebook/:id',(req,res) => {
