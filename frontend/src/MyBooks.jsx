@@ -17,7 +17,7 @@ function MyBooks(props){
             navigate(-1)
             console.log(err)
         })
-    })
+    },[])
 
     const handleDelete = (id) => {
         axios.delete('http://localhost:5000/book/deletebook/'+id)
@@ -29,7 +29,7 @@ function MyBooks(props){
         data.map((value,index) => <div className='bookcontainer'>
             <div className="bookitem" onClick={() => navigate("/showbook/"+value._id)} key={index}>                
                 <ul>
-                    <img src='http://localhost:5000/defaultpictures/default.png' alt="cover picture" />
+                    <img src={value.coverPicture == "default"? 'http://localhost:5000/defaultpictures/default.png':`http://localhost:5000/${value.coverPicture}`} width="259px" height="194px" alt="cover picture" />
                     <li>name : {value.name}</li>
                     <li>Pages : {value.pages}</li>
                     <li>author : {value.author}</li>

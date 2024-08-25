@@ -56,11 +56,45 @@ const move_this_pdf_file = (oldfile) => {
     return newpath
 }
 
-router.post('/addbook',upload.single('pathbook'),(req,res) => {
-    let pathbook = req.file
+const move_this_pictre = (oldfile) => {
+    let oldpath = oldfile.originalname
+    const ext = path.extname(oldpath)
+    if(ext != ".png" && ext != '.jpg' && ext != '.jpeg' && ext != '.bmp') return 2
+    const filename = path.basename(oldpath,ext)
+    var today = new Date()
+    var year = today.getFullYear()
+    var month = today.getMonth()
+    month = (month < 10)? "0"+month : month
+    var day = today.getDay()
+    day = (day < 10)? "0"+day : day
+    var hour = today.getHours()
+    hour = (hour < 10)? "0"+hour:hour
+    var minute = today.getMinutes()
+    minute = (minute < 10)? "0"+minute:minute
+    var second = today.getSeconds()
+    second = (second < 10)? "0"+second:second
+    const newpath = `./files/${filename}${year}${month}${day}${hour}${minute}${second}${ext}`
+    fs.copyFile(oldfile.path,newpath,(err) => {
+        if(err) return 0
+    }) 
+    return newpath
+}
+
+router.post('/addbook',upload.fields([{name: 'pathbook'},{name: 'coverPicture'}]),(req,res) => {
+    let pathbook = req.files['pathbook'][0]
+    let coverPicture = req.files['coverPicture'][0] ? req.files['coverPicture'][0] : null
     if(!pathbook) return res.status(400).send("Bad file or invalid file")
-    let { coverPicture,name,author,pages,publisherid } = req.body;
+    let { name,author,pages,publisherid } = req.body;
     pathbook = move_this_pdf_file(pathbook)
+    if(coverPicture){
+        coverPicture = move_this_pictre(coverPicture)
+        if(coverPicture == 2){
+            return res.status(400).send("check the extension it should be .png .jpg .jpeg or .bmp")
+        }
+        if(!coverPicture){
+            coverPicture = "default"
+        }
+    }
     if(!pathbook) return res.status(500).send("Error : check the extension of file it should be .pdf or no such a file or a directory")
     const newBook = new book({
         publisherid,
@@ -88,10 +122,15 @@ router.delete('/deletebook/:id',(req,res) => {
     book.findById({_id:id})
     .then(tbook => {
             let filepdf = tbook.pathbook
+            let picture = tbook.coverPicture
+            if(picture) picture = path.resolve(picture)
             filepdf = path.resolve(filepdf)
             if(fs.existsSync(filepdf)){
                 fs.unlink(filepdf,(err) => {
                     if(err) return res.status(400).send("unable to remove the file")
+                    fs.unlink(picture,(err) => {
+                        if(err) res.status(404).send("unable to find the picture or it might be deleted before")
+                    })
                     book.findByIdAndDelete({_id:id})
                     .then(() => res.status(200).send("Deleted Successfully"))
                     .catch(err => res.status(400).send(`error : ${err}`))
