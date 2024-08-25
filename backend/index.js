@@ -21,6 +21,7 @@ app.use(cors({
     method: ["POST","GET","DELETE","PUT"]
 }))
 app.use('/files',express.static(path.join(__dirname,'files')))
+app.use('/defaultpictures',express.static(path.join(__dirname,'defaultpictures')))
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())

@@ -19,6 +19,7 @@ function AllBooks(){
             {data.map((value,index) => 
                     <div className="bookitem" onClick={() => navigate("/showbook/"+value._id)} key={index}>                
                         <ul>
+                            <img src='http://localhost:5000/defaultpictures/default.png' alt="cover picture" />
                             <li>name : {value.name}</li>
                             <li>Pages : {value.pages}</li>
                             <li>author : {value.author}</li>
