@@ -11,6 +11,7 @@ function AddBook(props) {
     const [pathbook, setPathbook] = useState(null)
     const [coverpicture, setCoverpicture] = useState(null)
     const [data, setData] = useState()
+    const [messageError,setMessageError] = useState("")
 
     axios.defaults.withCredentials = true
 
@@ -43,7 +44,10 @@ function AddBook(props) {
                 console.log(response)
                 navigate('/board')
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err)
+                setMessageError(err.response.data)
+            })
     }
 
     const handleName = (e) => {
@@ -119,6 +123,7 @@ function AddBook(props) {
                     <button type="submit">Submit</button>
                     <button type="button" onClick={handleReset}>Reset</button>
                 </form>
+                <p className='error'>{messageError}</p>
             </div>
         </>
     )

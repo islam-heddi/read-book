@@ -82,7 +82,9 @@ const move_this_pictre = (oldfile) => {
 
 router.post('/addbook',upload.fields([{name: 'pathbook'},{name: 'coverPicture'}]),(req,res) => {
     let pathbook = req.files['pathbook'][0]
-    let coverPicture = req.files['coverPicture'][0] ? req.files['coverPicture'][0] : null
+    let the_file = req.files['coverPicture']
+    let is_undefined = typeof the_file !== "undefined"
+    let coverPicture =  is_undefined ? req.files['coverPicture'][0] : null
     if(!pathbook) return res.status(400).send("Bad file or invalid file")
     let { name,author,pages,publisherid } = req.body;
     pathbook = move_this_pdf_file(pathbook)
@@ -91,9 +93,9 @@ router.post('/addbook',upload.fields([{name: 'pathbook'},{name: 'coverPicture'}]
         if(coverPicture == 2){
             return res.status(400).send("check the extension it should be .png .jpg .jpeg or .bmp")
         }
-        if(!coverPicture){
-            coverPicture = "default"
-        }
+        
+    }else if(!coverPicture){
+        coverPicture = "default"
     }
     if(!pathbook) return res.status(500).send("Error : check the extension of file it should be .pdf or no such a file or a directory")
     const newBook = new book({
@@ -109,9 +111,10 @@ router.post('/addbook',upload.fields([{name: 'pathbook'},{name: 'coverPicture'}]
     .catch((err) => res.send(`error : ${err}`))
 })
 
-router.put('/updatebook/:id', (req,res) => {
+router.put('/updatebook/:id',upload.single('coverPicture'),(req,res) => {
+    let coverPicture = req.file
     const {id} = req.params
-    const { coverPicture,name,author,pages } = req.body
+    const { name,author,pages } = req.body
     book.findByIdAndUpdate({_id:id},{coverPicture,name,author,pages})
     .then(() => res.status(200).send("updated successfully"))
     .catch(err => res.status(400).send(err))
