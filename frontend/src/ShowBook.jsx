@@ -15,7 +15,7 @@ function ShowBook(props){
             console.log(err)
             navigate(-1)
         })
-    },)
+    },[])
 
 
     useEffect(() => {

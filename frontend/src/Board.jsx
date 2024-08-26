@@ -28,9 +28,6 @@ function Board(props) {
     const body = data && (
         <div>
             <h1>Welcome to Read Book</h1>
-            <p>Hello, Mr {data.name || " "}</p>
-            <p>Email: {data.email || " "}</p>
-            <p>You were born in {data.date || " "}</p>
             <button onClick={() => navigate('/addbook')}>Add a book</button>
             <button onClick={() => navigate('/mybooks/'+data.id)}>My published books</button>
             <AllBooks />
@@ -39,7 +36,7 @@ function Board(props) {
 
     return (
         <>
-            <NavBar auth={props.auth} />
+            <NavBar auth={props.auth}/>
             {!data ? "Loading..." : body}
         </>
     )

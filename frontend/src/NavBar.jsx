@@ -25,8 +25,9 @@ function NavBar(props){
 
     const Auth = 
     <ul>
-        <li onClick={HandleDeconnect}>Deconnect</li>
+        <li onClick={() => navigate('/profile')}>Profile</li>
         <li onClick={() => navigate('/settings')}>Settings</li>
+        <li onClick={HandleDeconnect}>Deconnect</li>
     </ul>
 
     const handleLogo = () => {

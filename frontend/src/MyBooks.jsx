@@ -7,8 +7,12 @@ function MyBooks(props){
     const {id} = useParams()
     const navigate = useNavigate()
     const [data,setData] = useState()
+    const [isInProfile,setIsInProfile] = useState(typeof props.inprofile !== 'undefined')
     useEffect(() => {
-        axios.get('http://localhost:5000/book/mybooks/'+id)
+        let idofbooks;
+        if(typeof props.profileid !== 'undefined') idofbooks=props.profileid
+        else idofbooks = id;
+        axios.get('http://localhost:5000/book/mybooks/'+idofbooks)
         .then(response => {
             setData(response.data)
             console.log(data)
@@ -44,7 +48,7 @@ function MyBooks(props){
 
     return(
         <>
-            <NavBar auth={props.auth}/>
+            {isInProfile? "" : <NavBar auth={props.auth}/>}
             {!data? "loading ...":ShowData}
             
         </>
