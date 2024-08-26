@@ -240,7 +240,7 @@ function Settings(props) {
                                     </tr>
                                 </tbody>
                             </table>
-                            <button type="submit">Remove this account</button>
+                            <button className='errbtn' type="submit">Remove this account</button>
                         </form>
                         <p className='error'>{errorMessage}</p>
                     </div>

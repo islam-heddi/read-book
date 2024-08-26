@@ -40,8 +40,8 @@ function MyBooks(props){
                 </ul>
             </div>
             <div>
-                <button onClick={() => navigate("/updatebook/"+value._id)}>Update info</button>
-                <button onClick={() => handleDelete(value._id)}>Delete book</button>
+                <button className='updbtn' onClick={() => navigate("/updatebook/"+value._id)}>Update info</button>
+                <button className='errbtn' onClick={() => handleDelete(value._id)}>Delete book</button>
             </div>
         </div>)
     )

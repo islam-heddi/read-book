@@ -31,7 +31,7 @@ function NavBar(props){
     </ul>
 
     const handleLogo = () => {
-        navigate(props.auth?'/board':'/login')
+        navigate(props.auth?'/board':'/')
     }
 
     return(
