@@ -22,6 +22,10 @@ function Board(props) {
     }, [navigate, props])
 
     useEffect(() => {
+        document.title = "Read a book"
+    },[])
+
+    useEffect(() => {
         console.log(data)
     }, [data])
 

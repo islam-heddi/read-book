@@ -24,6 +24,10 @@ function AddBook(props) {
             })
     }, [navigate])
 
+    useEffect(() => {
+        document.title = "Add a book"
+    })
+
     const handleSubmit = (e) => {
         e.preventDefault()
         const formData = new FormData()

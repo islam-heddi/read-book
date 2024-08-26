@@ -1,6 +1,6 @@
 import axios from "axios";
 import NavBar from "./NavBar";
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 function Login(){
     const [email,setEmail] = useState("")
@@ -40,6 +40,10 @@ function Login(){
             setErrorMessage(err.response.data.error)
         })
     }
+
+    useEffect(() => {
+        document.title = "Login"
+    },[])
 
     return(
         <>

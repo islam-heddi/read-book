@@ -24,6 +24,10 @@ function Profile(props){
         }
     },[data])
 
+    useEffect(() => {
+        document.title = "Profile"
+    })
+
     const profile = data && (
         <>
             <h1>My Profile</h1>

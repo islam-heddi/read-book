@@ -1,5 +1,5 @@
 import NavBar from "./NavBar"
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import axios from "axios"
 import {useNavigate} from 'react-router-dom'
 function Register(){
@@ -70,6 +70,10 @@ function Register(){
             setErrorMessage("error email exists")
         })
     }
+
+    useEffect(() => {
+        document.title = "Register"
+    },[])
     return(
         <>
             <NavBar />

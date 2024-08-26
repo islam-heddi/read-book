@@ -17,6 +17,10 @@ function ShowBook(props){
         })
     },[])
 
+    useEffect(() => {
+        document.title = !data? "Read a book": data.name
+    },[data])
+
 
     useEffect(() => {
         console.log(data)
@@ -38,12 +42,15 @@ function ShowBook(props){
     const previewing = data && (
             <div>
                 <h1>View the book</h1>
-                <ul>
-                    <li>Name : {data.name}</li>
-                    <li>Author : {data.author}</li>
-                    <li>pages : {data.pages}</li>
-                </ul>
-                <iframe src={pdfurl} width="100%" height="500px" />
+                <div className="mainpurpose">
+                    <img src={`http://localhost:5000/${data.coverPicture}`}alt={`cover of ${data.name} book`} />
+                    <ul>
+                        <li>Name : {data.name}</li>
+                        <li>Author : {data.author}</li>
+                        <li>pages : {data.pages}</li>
+                    </ul>
+                </div>
+                <iframe src={pdfurl} width="100%" height="800px" />
             </div>       
     )
 

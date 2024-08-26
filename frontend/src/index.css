@@ -159,3 +159,13 @@ button:hover{
 .updbtn:hover{
   background-color: rgba(60, 255, 0, 0.425);
 }
+
+.mainpurpose{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  > ul li{
+    margin: 20px;
+  }
+}

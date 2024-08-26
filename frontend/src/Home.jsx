@@ -1,4 +1,5 @@
 import NavBar from './NavBar'
+import React,{useEffect} from 'react'
 function Home(){
 
     const main = 
@@ -8,6 +9,10 @@ function Home(){
             in this web application you will be able to read 
         </p>
     </div>
+
+    useEffect(() => {
+        document.title = "Read a book"
+    },[])
 
     return(
     <>
