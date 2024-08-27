@@ -30,6 +30,7 @@ function Profile(props){
 
     const profile = data && (
         <>
+            <img src={`http://localhost:5000/defaultpictures/profiledefault.jpg`} alt='profile picture'/>
             <h1>My Profile</h1>
             <p>Hello, Mr {data.name || " "}</p>
             <p>Email: {data.email || " "}</p>
