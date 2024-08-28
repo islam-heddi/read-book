@@ -1,5 +1,6 @@
 import NavBar from './NavBar'
 import MyBooks from './MyBooks'
+import ProfilePicture from './ProfilePicture'
 import React,{useState,useEffect} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -28,9 +29,11 @@ function Profile(props){
         document.title = "Profile"
     })
 
+    
+
     const profile = data && (
         <>
-            <img src={`http://localhost:5000/defaultpictures/profiledefault.jpg`} alt='profile picture'/>
+            <ProfilePicture id={data.id}/>
             <h1>My Profile</h1>
             <p>Hello, Mr {data.name || " "}</p>
             <p>Email: {data.email || " "}</p>
@@ -38,8 +41,9 @@ function Profile(props){
         </>
     )
 
+
     return(<>
-        <NavBar auth={props.auth}/>
+        <NavBar auth={true}/>
         <div>
             {!data? "Loading ..." : profile }
             <h1>My shared book</h1>

@@ -169,3 +169,7 @@ button:hover{
     margin: 20px;
   }
 }
+
+.profile{
+  cursor: pointer;
+}

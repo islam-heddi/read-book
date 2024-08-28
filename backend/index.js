@@ -14,6 +14,7 @@ const LoginRoute = require('./router/login')
 const protectedRoute = require('./router/protectedRoute')
 const cookieParser = require('cookie-parser')
 const deconnect = require('./router/deconnect')
+const profilepicture = require('./router/user')
 
 app.use(cors({
     origin: "http://localhost:5173",
@@ -32,6 +33,7 @@ app.use('/',registerRoute)
 app.use('/',LoginRoute)
 app.use('/',protectedRoute)
 app.use('/',deconnect)
+app.use('/profile/',profilepicture)
 
 mongoose.connect(url)
 .then(() => console.log("database connected"))
