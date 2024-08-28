@@ -8,6 +8,7 @@ function MyBooks(props){
     const navigate = useNavigate()
     const [data,setData] = useState()
     const [isInProfile,setIsInProfile] = useState(typeof props.inprofile !== 'undefined')
+    const [message,setMessage] = useState("")
     useEffect(() => {
         let idofbooks;
         if(typeof props.profileid !== 'undefined') idofbooks=props.profileid
@@ -22,6 +23,14 @@ function MyBooks(props){
             console.log(err)
         })
     },[])
+
+    useEffect(() => {
+        if(data){
+            if(data.length == 0){
+                setMessage("Unfortunately it seems like you didnt upload a book")
+            }
+        }
+    },[data])
 
     const handleDelete = (id) => {
         axios.delete('http://localhost:5000/book/deletebook/'+id)
@@ -50,7 +59,7 @@ function MyBooks(props){
         <>
             {isInProfile? "" : <NavBar auth={props.auth}/>}
             {!data? "loading ...":ShowData}
-            
+            {message == "" ? "": <div><h1>{message}</h1></div>}
         </>
     )
 }

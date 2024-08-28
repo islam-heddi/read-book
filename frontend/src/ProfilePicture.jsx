@@ -20,7 +20,9 @@ function addProfilePicture(props){
     useEffect(() => {
         if(data){
             setPictureUrl('http://localhost:5000/'+data.pictureUrl)
-
+        }else{
+            setPictureUrl('http://localhost:5000/defaultpictures/profiledefault.jpg')
+            
         }
     },[data])
 
