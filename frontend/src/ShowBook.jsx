@@ -8,6 +8,7 @@ function ShowBook(props){
     const [data,setData] = useState()
     const id_of_book = useParams()
     const [pdfurl,setPdfurl] = useState("")
+    const [picture,setPicture] = useState("")
     useEffect(() => {
         axios.get('http://localhost:5000/book/findbook/'+id_of_book.id)
         .then(response => setData(response.data))
@@ -28,22 +29,21 @@ function ShowBook(props){
         setPdfurl(!data? "" : url+data.pathbook)
     },[data])
 
-/*    useEffect(() => {
-        axios.get('http://localhost:5000/book/downloadbook/'+id_of_book.id)
-        .then(response => {
-            setDownloaddata(response.data)
-        })
-        .catch((err) => {
-            console.log(err)
-            navigate(-1)
-        })
-    },)*/
+    useEffect(() => {
+        if(data){
+            if(data.coverPicture == "default"){
+                setPicture("http://localhost:5000/defaultpictures/default.png")
+            }else{
+                setPicture(`http://localhost:5000/${data.coverPicture}`)
+            }
+        }
+    },[data])
 
     const previewing = data && (
             <div>
                 <h1>View the book</h1>
                 <div className="mainpurpose">
-                    <img src={`http://localhost:5000/${data.coverPicture}`}alt={`cover of ${data.name} book`} />
+                    <img src={picture} alt={`cover of ${data.name} book`} />
                     <ul>
                         <li>Name : {data.name}</li>
                         <li>Author : {data.author}</li>
