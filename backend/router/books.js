@@ -146,4 +146,22 @@ router.delete('/deletebook/:id',(req,res) => {
     }
 )
 
+router.get('/search',async(req,res) => {
+    const { q } = req.query
+
+    if(!q) {
+        return res.status(400).send("the query is required")
+    }
+
+    try{
+        const regex = new RegExp(`^${q}`,'i')
+        const searchBooks = await book.find({ name: regex })
+
+        return res.status(200).json(searchBooks)
+    }catch(err){
+        return res.status(500).send(`server error : ${err}`)
+    }
+    
+})
+
 module.exports = router
