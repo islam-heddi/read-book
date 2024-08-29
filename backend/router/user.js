@@ -38,14 +38,16 @@ router.put('/updatepictureprofile/:id',upload.single("pictureUrl"),async (req,re
     const { id } = req.params
     let pictureUrl = req.file
     try{
-        const resp = await profilepicture.findOne({id})
-        await fs.unlink(resp.pictureUrl,(err) => {
-            if(err) return res.status(400).send(`error : ${err}`)
-        })
+        const resp = await profilepicture.find({id:id})
+        if(fs.existsSync(resp.pictureUrl)){
+            await fs.unlink(resp.pictureUrl,(err) => {
+                if(err) res.status(400).send(`error : ${err}`)
+            })
+        }
         pictureUrl = move_this_profile_picture(pictureUrl)
         if(pictureUrl == 2) return res.status(400).send("The file extension must be .bmp .png .jpg .jpeg")
         else if(pictureUrl == 0 ) return res.status(400).send("error while sending the file")
-        const resp2 = await profilepicture.findByIdAndUpdate({id},{pictureUrl})
+        const resp2 = await profilepicture.findOneAndUpdate({id},{pictureUrl})
         return res.status(200).send("Update the picture done successfully")
     }catch(err){
         return res.status(500).send(`Error : ${err}`)
@@ -54,12 +56,14 @@ router.put('/updatepictureprofile/:id',upload.single("pictureUrl"),async (req,re
 
 router.delete('/deletepictureprofile/:id',(req,res) => {
     const {id} = req.params;
-    profilepicture.findOne({id})
+    profilepicture.find({id:id})
     .then(userprofile => {
-        fs.unlink(userprofile.pictureUrl,(err) => {
-            if(err) return res.status(400).send("error while deleting the picture")
-        })
-        profilepicture.findByIdAndDelete({id})
+        if(fs.existsSync(userprofile.pictureUrl)){
+            fs.unlink(userprofile.pictureUrl,(err) => {
+                if(err) return res.status(400).send("error while deleting the picture")
+            })
+        }
+        profilepicture.findOneAndDelete({id})
         .then(response => {
             return res.status(200).send(`deleting the element successfully ${response}`)
         })

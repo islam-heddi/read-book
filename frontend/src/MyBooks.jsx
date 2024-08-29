@@ -39,7 +39,7 @@ function MyBooks(props){
     }
 
     const ShowData = data && (
-        data.map((value,index) => <div className='bookcontainer'>
+        data.map((value,index) => <div key={index} className='bookcontainer'>
             <div className="bookitem" onClick={() => navigate("/showbook/"+value._id)} key={index}>                
                 <ul>
                     <img src={value.coverPicture == "default"? 'http://localhost:5000/defaultpictures/default.png':`http://localhost:5000/${value.coverPicture}`} width="259px" height="194px" alt="cover picture" />
