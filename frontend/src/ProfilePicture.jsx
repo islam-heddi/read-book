@@ -54,11 +54,29 @@ function addProfilePicture(props){
         
     }
 
-    const changePicture = <div>
+    const handleUpdate = async (e) => {
+        e.preventDefault()
+        try{
+        }catch(err){
+
+        }
+    }
+
+    const updatePicture = <div id='updatedelpicture'>
+            <h1>Wanna update the picture ?</h1>
+            <form onSubmit={handleUpdate}>
+                Select the picture :
+                <input type="file" onChange={e => handleChangeFile(e)} required/>
+                <button>Update</button>            
+            </form>
+            <button className='errbtn' onClick={handleDelete}>Delete the picture</button>
+        </div>
+
+    const changePicture = <div id="addpicture">
     <h1>Wanna change the profile picture ?</h1>
     <form onSubmit={handleSubmit}>
         Select the picture :
-        <input type="file" onChange={e => handleChangeFile(e)}/>
+        <input type="file" onChange={e => handleChangeFile(e)} required/>
         <button>Change</button>
     </form>
     </div>
