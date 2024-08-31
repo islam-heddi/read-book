@@ -24,9 +24,7 @@ function Comments(props){
         let today = new Date()
         let today_string = today.toString()
         today_string = today_string.split(' ')
-        console.log(today_string)
         setTodayDate(today_string[0]+" "+today_string[1]+" "+today_string[2]+" "+today_string[3])
-        console.log(todayDate)
         const information = {
             bookid: props.bookid,
             commenterid: user.id,
@@ -41,7 +39,7 @@ function Comments(props){
     return(<>
         <div>
         <h1>Comments</h1>
-            <input type='text' value={comment} onChange={e => handleComment(e)} placeholder="Put your comment here" />
+            <input type='text' className='commentinput' value={comment} onChange={e => handleComment(e)} placeholder="Put your comment here" />
             <button onClick={handleSubmitComment}>Comment</button>
         </div>
         
