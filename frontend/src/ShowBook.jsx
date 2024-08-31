@@ -2,6 +2,7 @@ import NavBar from "./NavBar"
 import React,{useState,useEffect} from 'react'
 import axios from 'axios'
 import { useNavigate, useParams } from "react-router-dom"
+import Comments from './Comments'
 
 function ShowBook(props){
     const navigate = useNavigate()
@@ -58,6 +59,7 @@ function ShowBook(props){
         <>
             <NavBar auth={props.auth}/> 
             {!data? "Loading ........": previewing}
+            <Comments bookid={id_of_book.id}/>
         </>
     )
 }
