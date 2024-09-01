@@ -22,6 +22,13 @@ router.get('/getCommentsByUserId/:id',(req,res) => {
     .catch(err => res.status(500).send(err))
 })
 
+router.get('/getCommentsByBookId/:id',(req,res) => {
+    const {id} = req.params
+    Comments.find({bookid:id})
+    .then(Comments => res.status(200).json(Comments))
+    .catch(err => res.status(500).send(`Error : ${err}`))
+})
+
 router.post('/addComment',(req,res) => {
     const {bookid,comment,commenterid,datePublish} = req.body
     const newComment = new Comments({

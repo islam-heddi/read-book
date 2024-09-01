@@ -4,6 +4,7 @@ function Comments(props){
     const [comment,setComment] = useState("")
     const [todayDate,setTodayDate] = useState("")
     const [user,setUser] = useState() 
+    const [data,setData]  = useState()
     const handleComment = (e) => {
         setComment(e.target.value)
     }
@@ -14,9 +15,24 @@ function Comments(props){
         .catch(err => console.log(err))
     },[])
 
+    useEffect(() => {
+        axios.get('http://localhost:5000/comment/getCommentsByBookId/'+props.bookid)
+        .then(response => {
+            setData(response.data)
+        })
+        .catch(err => console.log(err))
+    },[])
 
+    const ShowComments = data && <div>
+        {
+            data.map((value,index) => <div key={index}>
+                <p>in : <b>{value.datePublish}</b></p>
+                <p>{value.comment}</p>
+            </div>)
+        }
+    </div>
 
-    const handleSubmitComment = () => {
+    const handleSubmitComment = async () => {
         if(!user) {
             console.log("Error in user or waiting for parsing the data")
             return 0;
@@ -31,9 +47,13 @@ function Comments(props){
             comment,
             datePublish: todayDate
         }
-        axios.post('http://localhost:5000/comment/addComment',information)
-        .then(response => console.log(response))
-        .catch(err => console.log(err))
+        try{
+
+            const response = await axios.post('http://localhost:5000/comment/addComment',information)
+            console.log(response)
+        }catch(err){
+            console.log(err)
+        }
     }
 
     return(<>
@@ -42,7 +62,7 @@ function Comments(props){
             <input type='text' className='commentinput' value={comment} onChange={e => handleComment(e)} placeholder="Put your comment here" />
             <button onClick={handleSubmitComment}>Comment</button>
         </div>
-        
+        {ShowComments}
     </>)
 }
 
